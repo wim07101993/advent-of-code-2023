@@ -19,8 +19,6 @@ func Solve(r io.Reader) int {
 
 	var sum = 0
 	for scanner.Scan() {
-		x := SolveLine(scanner.Text())
-		fmt.Printf("%v + %v = %v\n", sum, x, sum+x)
 		sum += SolveLine(scanner.Text())
 	}
 
