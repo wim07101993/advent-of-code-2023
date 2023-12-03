@@ -16,33 +16,29 @@ func Solve(r io.Reader) int {
 	scanner := bufio.NewScanner(r)
 	scanner.Split(bufio.ScanLines)
 
-	const red = 12
-	const green = 13
-	const blue = 14
-
-	var sum = 0
+	var power = 0
 
 	for scanner.Scan() {
 		g := shared.ParseGame(scanner.Text())
-		if isGamePossibleWith(g, red, green, blue) {
-			sum += g.Id
-		}
+		red, green, blue := minCubesNeededForGame(g)
+		power += red * green * blue
+
 	}
 
-	return sum
+	return power
 }
 
-func isGamePossibleWith(g shared.Game, red int, green int, blue int) bool {
+func minCubesNeededForGame(g shared.Game) (red int, green int, blue int) {
 	for _, r := range g.Rounds {
 		if r.Red > red {
-			return false
+			red = r.Red
 		}
 		if r.Green > green {
-			return false
+			green = r.Green
 		}
 		if r.Blue > blue {
-			return false
+			blue = r.Blue
 		}
 	}
-	return true
+	return
 }

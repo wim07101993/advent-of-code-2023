@@ -14,7 +14,7 @@ func TestSolve(t *testing.T) {
 	input.WriteString("Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green\n")
 
 	output := Solve(strings.NewReader(input.String()))
-	const expected = 8
+	const expected = 2286
 	if output != expected {
 		t.Fatalf("expected output to be %v but got %v", expected, output)
 	}

@@ -22,7 +22,7 @@ func TestSolveLine(t *testing.T) {
 	for _, c := range cases {
 		output := SolveLine(c.input)
 		if output != c.expected {
-			t.Logf("expected output to be %v but got %v", c.expected, output)
+			t.Fatalf("expected output to be %v but got %v", c.expected, output)
 		}
 	}
 }
@@ -40,6 +40,6 @@ func TestSolve(t *testing.T) {
 	output := Solve(strings.NewReader(input.String()))
 	const expected = 281
 	if output != expected {
-		t.Logf("expected output to be %v but got %v", expected, output)
+		t.Fatalf("expected output to be %v but got %v", expected, output)
 	}
 }
