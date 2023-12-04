@@ -13,7 +13,7 @@ func ParseGame(s string) Game {
 	}
 	g := Game{Id: id}
 	rounds := strings.Split(ss[1], "; ")
-	g.Rounds = make([]Round, len(rounds), len(rounds))
+	g.Rounds = make([]Round, len(rounds))
 	for i, round := range rounds {
 		g.Rounds[i] = parseRound(round)
 	}
