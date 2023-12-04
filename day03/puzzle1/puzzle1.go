@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bufio"
+	"advent-of-code-2023/shared"
 	"fmt"
 	"io"
 	"os"
@@ -14,7 +14,7 @@ func main() {
 }
 
 func Solve(r io.Reader) int {
-	runes := readAllRunesByLine(r)
+	runes := shared.ReadAllRunesByLine(r)
 
 	var sum = 0
 
@@ -106,16 +106,4 @@ func getNumber(runes []rune, start int) string {
 		}
 	}
 	return string(runes[start:])
-}
-
-func readAllRunesByLine(r io.Reader) [][]rune {
-	var runes [][]rune
-
-	scanner := bufio.NewScanner(r)
-	scanner.Split(bufio.ScanLines)
-	for scanner.Scan() {
-		runes = append(runes, []rune(scanner.Text()))
-	}
-
-	return runes
 }

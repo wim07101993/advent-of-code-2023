@@ -2,6 +2,7 @@ package main
 
 import (
 	"advent-of-code-2023/shared"
+	"slices"
 	"strings"
 	"testing"
 )
@@ -19,7 +20,7 @@ func TestSolve(t *testing.T) {
 .664.598..`
 
 	output := Solve(strings.NewReader(input))
-	const expected = 4361
+	const expected = 467835
 	if output != expected {
 		t.Fatalf("expected output to be %v but got %v", expected, output)
 	}
@@ -33,19 +34,19 @@ type GetNumberInput struct {
 func TestGetNumber(t *testing.T) {
 	cases := []struct {
 		input    GetNumberInput
-		expected string
+		expected int
 	}{
 		{
 			GetNumberInput{[]rune("467..114.."), 0},
-			"467",
+			467,
 		},
 		{
-			GetNumberInput{[]rune("467..114.."), 5},
-			"114",
+			GetNumberInput{[]rune("467..114.."), 6},
+			114,
 		},
 		{
-			GetNumberInput{[]rune(".......+.58"), 9},
-			"58",
+			GetNumberInput{[]rune(".......+.58"), 10},
+			58,
 		},
 	}
 
@@ -57,14 +58,13 @@ func TestGetNumber(t *testing.T) {
 	}
 }
 
-type CheckNumberHasAdjacentSymbolsCase struct {
-	s        string
+type GetAdjacentNumbersCase struct {
 	x        int
 	y        int
-	expected bool
+	expected []int
 }
 
-func TestCheckNumberHasAdjacentSymbols(t *testing.T) {
+func TestGetAdjacentNumbers(t *testing.T) {
 	s := `467..114..
 ...*......
 ..35..633.
@@ -74,27 +74,23 @@ func TestCheckNumberHasAdjacentSymbols(t *testing.T) {
 ..592.....
 ......7555
 ...$.*....
-.664.598..`
+..664.598.`
 	rs := shared.ReadAllRunesByLine(strings.NewReader(s))
-	cases := []CheckNumberHasAdjacentSymbolsCase{
-		{"467", 0, 0, true},
-		{"114", 5, 0, false},
-		{"35", 2, 2, true},
-		{"633", 6, 2, true},
-		{"617", 0, 4, true},
-		{"58", 8, 5, false},
-		{"592", 2, 6, true},
-		{"7555", 6, 7, true},
-		{"664", 1, 9, true},
-		{"598", 5, 9, true},
+	cases := []GetAdjacentNumbersCase{
+		{3, 1, []int{467, 35}},
+		{3, 4, []int{617}},
+		{5, 8, []int{7555, 664, 598}},
 	}
 
 	for _, c := range cases {
-		output := checkNumberHasAdjacentSymbols(rs, c.s, c.x, c.y)
-		if output && !c.expected {
-			t.Fatalf("expected %v to not have adjacent symbols", c.s)
-		} else if !output && c.expected {
-			t.Fatalf("expected %v to have adjacent symbols", c.s)
+		output := getAdjacentNumbers(rs, c.x, c.y)
+		if len(output) != len(c.expected) {
+			t.Fatalf("expected %v but got %v (lenght difference)", c.expected, output)
+		}
+		for _, i := range c.expected {
+			if !slices.Contains(output, i) {
+				t.Fatalf("expected %v but got %v (doesnt contain %v)", c.expected, output, i)
+			}
 		}
 	}
 }
