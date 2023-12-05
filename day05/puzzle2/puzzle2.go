@@ -51,16 +51,13 @@ func Solve(r io.Reader) int {
 		}
 	}
 
-	var loc int
-	for _, sr := range seeds {
-		for s := sr.start; s < sr.start+sr.length; s++ {
-			if l := seedMap.GetSeedLocation(s); l < loc || loc == 0 {
-				loc = l
-			}
-		}
+	cs := make([]chan int, len(seeds))
+	for i, sr := range seeds {
+		cs[i] = make(chan int, 10)
+		go sr.GetLocations(seedMap, cs[i])
 	}
 
-	return loc
+	return chanMin(cs)
 }
 
 func ParseSeeds(s string) []SeedRange {
@@ -78,4 +75,27 @@ func ParseSeeds(s string) []SeedRange {
 		seeds[i] = SeedRange{start, length}
 	}
 	return seeds
+}
+
+func (sr SeedRange) GetLocations(m shared.SeedMap, c chan<- int) {
+	l := 0
+	for s := sr.start; s < sr.start+sr.length; s++ {
+		if x := m.GetSeedLocation(s); x < l || l == 0 {
+			l = x
+		}
+	}
+	c <- l
+	close(c)
+}
+
+func chanMin(cs []chan int) int {
+	x := 0
+	for _, c := range cs {
+		for y := range c {
+			if y < x || x == 0 {
+				x = y
+			}
+		}
+	}
+	return x
 }
