@@ -14,6 +14,11 @@ func main() {
 	fmt.Println(Solve(os.Stdin))
 }
 
+type SeedRange struct {
+	start  int
+	length int
+}
+
 func Solve(r io.Reader) int {
 	scanner := bufio.NewScanner(r)
 	scanner.Split(bufio.ScanLines)
@@ -47,24 +52,30 @@ func Solve(r io.Reader) int {
 	}
 
 	var loc int
-	for _, s := range seeds {
-		if l := seedMap.GetSeedLocation(s); l < loc || loc == 0 {
-			loc = l
+	for _, sr := range seeds {
+		for s := sr.start; s < sr.start+sr.length; s++ {
+			if l := seedMap.GetSeedLocation(s); l < loc || loc == 0 {
+				loc = l
+			}
 		}
 	}
 
 	return loc
 }
 
-func ParseSeeds(s string) []int {
+func ParseSeeds(s string) []SeedRange {
 	ss := strings.Split(strings.Split(s, ": ")[1], " ")
-	seeds := make([]int, len(ss))
-	var err error
-	for i := range ss {
-		seeds[i], err = strconv.Atoi(ss[i])
+	seeds := make([]SeedRange, len(ss)/2)
+	for i := range seeds {
+		start, err := strconv.Atoi(ss[i*2])
 		if err != nil {
 			panic(err)
 		}
+		length, err := strconv.Atoi(ss[(i*2)+1])
+		if err != nil {
+			panic(err)
+		}
+		seeds[i] = SeedRange{start, length}
 	}
 	return seeds
 }
