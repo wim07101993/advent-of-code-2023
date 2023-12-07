@@ -1,10 +1,10 @@
 package main
 
 import (
+	"advent-of-code-2023/day06/shared"
 	"bufio"
 	"fmt"
 	"io"
-	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -30,7 +30,7 @@ func Solve(r io.Reader) int {
 	result := 1
 
 	for i := range ts {
-		result *= Magic(ts[i], ds[i])
+		result *= shared.Magic(ts[i], ds[i])
 	}
 
 	return result
@@ -50,14 +50,4 @@ func ParseNumbers(s string) []int {
 		is = append(is, i)
 	}
 	return is
-}
-
-// Magic does some magic algorithm which is explained in maths.md
-func Magic(t int, s int) int {
-	ft := float64(t)
-	fs := float64(s)
-	trecord1 := (-ft + math.Sqrt(ft*ft-4*fs)) / (-2)
-	trecord2 := (-ft - math.Sqrt(ft*ft-4*fs)) / (-2)
-	n := math.Ceil(trecord2-1) - math.Floor(trecord1+1) + 1
-	return int(n)
 }
