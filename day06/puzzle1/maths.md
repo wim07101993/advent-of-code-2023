@@ -63,7 +63,7 @@ $$
 Which can be rewritten as:
 
 $$
-t_{hold} = \dfrac{t_race}{2}
+t_{hold} = \dfrac{t_{race}}{2}
 $$
 
 This formula confirms the intuition that we should half the race time to get the
