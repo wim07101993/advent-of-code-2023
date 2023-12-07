@@ -85,6 +85,7 @@ Which translates in the example to
 
 $$
 0 = - t_{hold}^2 + 7t_{hold} -9
+$$
 
 To get the time for a given distance we need to solve this equation to get
 $`t_race`$:
@@ -93,7 +94,6 @@ $$
 t_{record} = \dfrac 
 {-t_{race} \pm\sqrt{t_{race}^2 - 4\cdot(-1)\cdot(-s)}}
 {2\cdot(-1)}
-
  = \dfrac 
 {-t_{race} \pm\sqrt{t_{race}^2 - 4s}} 
 {-2}
