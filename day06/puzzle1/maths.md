@@ -33,14 +33,14 @@ s = t_{hold}t_{race} - t_{hold}^2
 $$
 
 In which $`s`$ is the distance travelled, $`t_{hold}`$ is the time we hold
-the button and `t_{race}` is the time at which we need to know the distance.
+the button and $`t_{race}`$ is the time at which we need to know the distance.
 
 ## Distance travelled in function of the hold-time
 
 With the function from the previous chapter we can calculate what the maximum
-distance is for a given time. We just need to make the `t_{race}` parameter
-fixed and use the `t_{hold}` parameter as variable. This results in a quadratic
-equation.
+distance is for a given time. We just need to make the $`t_{race}`$ parameter
+fixed and use the $`t_{hold}`$ parameter as variable. This results in a 
+quadratic equation.
 
 $$
 s = t_{hold}t_{race} - t_{hold}^2
@@ -67,7 +67,7 @@ t_{hold} = \dfrac{t_race}{2}
 $$
 
 This formula confirms the intuition that we should half the race time to get the
-time to release the button. In the example this results in $`\fraq{7}{2}`$.
+time to release the button. In the example this results in $`\dfrac{7}{2}`$.
 This is verified by looking ath the graph in which we see the best tim is
 between 3 and 4.
 
