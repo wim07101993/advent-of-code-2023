@@ -21,7 +21,7 @@ func TestSolve(t *testing.T) {
 	output := Solve(strings.NewReader(input))
 	const expected = 4361
 	if output != expected {
-		t.Fatalf("expected output to be %v but got %v", expected, output)
+		t.Errorf("expected output to be %v but got %v", expected, output)
 	}
 }
 
@@ -52,7 +52,7 @@ func TestGetNumber(t *testing.T) {
 	for _, c := range cases {
 		output := getNumber(c.input.rs, c.input.start)
 		if output != c.expected {
-			t.Fatalf("expected number to be %v but got %v", c.expected, output)
+			t.Errorf("expected number to be %v but got %v", c.expected, output)
 		}
 	}
 }
@@ -92,9 +92,9 @@ func TestCheckNumberHasAdjacentSymbols(t *testing.T) {
 	for _, c := range cases {
 		output := checkNumberHasAdjacentSymbols(rs, c.s, c.x, c.y)
 		if output && !c.expected {
-			t.Fatalf("expected %v to not have adjacent symbols", c.s)
+			t.Errorf("expected %v to not have adjacent symbols", c.s)
 		} else if !output && c.expected {
-			t.Fatalf("expected %v to have adjacent symbols", c.s)
+			t.Errorf("expected %v to have adjacent symbols", c.s)
 		}
 	}
 }

@@ -14,6 +14,6 @@ func TestSolve(t *testing.T) {
 
 	output := Solve(strings.NewReader(input))
 	if output != expected {
-		t.Fatalf("expected output to be %v but got %v", expected, output)
+		t.Errorf("expected output to be %v but got %v", expected, output)
 	}
 }

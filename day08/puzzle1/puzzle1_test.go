@@ -38,7 +38,7 @@ func TestNodes_CalcSteps(t *testing.T) {
 	for _, c := range cases {
 		output := c.nodes.CalcSteps(c.input)
 		if output != c.expected {
-			t.Fatalf("expected output to be %v but got %v", c.expected, output)
+			t.Errorf("expected output to be %v but got %v", c.expected, output)
 		}
 	}
 }
@@ -73,7 +73,7 @@ ZZZ = (ZZZ, ZZZ)`,
 	for _, c := range cases {
 		output := Solve(strings.NewReader(c.input))
 		if output != c.expected {
-			t.Fatalf("expected output to be %v but got %v", c.expected, output)
+			t.Errorf("expected output to be %v but got %v", c.expected, output)
 		}
 	}
 }

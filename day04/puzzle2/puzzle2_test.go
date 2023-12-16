@@ -21,7 +21,7 @@ func TestGetNumberOfWinningNumbers(t *testing.T) {
 	for _, c := range cases {
 		output := GetNumberOfWinningNumbers(c.input)
 		if output != c.expected {
-			t.Fatalf("expected output to be %v but got %v", c.expected, output)
+			t.Errorf("expected output to be %v but got %v", c.expected, output)
 		}
 	}
 }
@@ -37,6 +37,6 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11`
 	output := Solve(strings.NewReader(input))
 	const expected = 30
 	if output != expected {
-		t.Fatalf("expected output to be %v but got %v", expected, output)
+		t.Errorf("expected output to be %v but got %v", expected, output)
 	}
 }

@@ -22,7 +22,7 @@ func TestSolve(t *testing.T) {
 	output := Solve(strings.NewReader(input))
 	const expected = 467835
 	if output != expected {
-		t.Fatalf("expected output to be %v but got %v", expected, output)
+		t.Errorf("expected output to be %v but got %v", expected, output)
 	}
 }
 
@@ -53,7 +53,7 @@ func TestGetNumber(t *testing.T) {
 	for _, c := range cases {
 		output := getNumber(c.input.rs, c.input.start)
 		if output != c.expected {
-			t.Fatalf("expected number to be %v but got %v", c.expected, output)
+			t.Errorf("expected number to be %v but got %v", c.expected, output)
 		}
 	}
 }
@@ -89,7 +89,7 @@ func TestGetAdjacentNumbers(t *testing.T) {
 		}
 		for _, i := range c.expected {
 			if !slices.Contains(output, i) {
-				t.Fatalf("expected %v but got %v (doesnt contain %v)", c.expected, output, i)
+				t.Errorf("expected %v but got %v (doesnt contain %v)", c.expected, output, i)
 			}
 		}
 	}

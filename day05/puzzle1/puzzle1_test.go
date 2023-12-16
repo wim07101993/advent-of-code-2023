@@ -43,6 +43,6 @@ humidity-to-location map:
 	output := Solve(strings.NewReader(input))
 	const expected = 35
 	if output != expected {
-		t.Fatalf("expected output to be %v but got %v", expected, output)
+		t.Errorf("expected output to be %v but got %v", expected, output)
 	}
 }

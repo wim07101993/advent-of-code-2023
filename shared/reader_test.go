@@ -36,7 +36,7 @@ func TestReadAllRunesByLine(t *testing.T) {
 	}
 	for i := range output {
 		if string(output[i]) != string(expected[i]) {
-			t.Fatalf("expected line %v to be %v, got %v", i, string(expected[i]), string(output[i]))
+			t.Errorf("expected line %v to be %v, got %v", i, string(expected[i]), string(output[i]))
 		}
 	}
 }
