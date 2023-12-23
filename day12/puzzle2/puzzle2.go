@@ -43,11 +43,10 @@ func Solve(r io.Reader) int64 {
 		go func(c <-chan string) {
 			sum := 0
 			for range c {
-				pb.Describe(fmt.Sprintf("%v goroutines", runtime.NumGoroutine()))
 				sum++
 			}
 			total += int64(sum)
-			pb.Describe(fmt.Sprintf("%v goroutines", runtime.NumGoroutine()))
+			pb.Describe(fmt.Sprintf("%v goroutines\t%v total", runtime.NumGoroutine(), total))
 			err := pb.Add(1)
 			if err != nil {
 				panic(err)
@@ -76,8 +75,6 @@ func GetArrangements(springs string, damaged []int, results chan<- string) {
 		close(results)
 	}()
 
-	r := GetArrangementRegex(damaged)
-
 	for i := 0; i < len(springs)-damaged[0]-1; i++ {
 		start := i
 		end := start + damaged[0]
@@ -103,9 +100,7 @@ func GetArrangements(springs string, damaged []int, results chan<- string) {
 		for arr := range c {
 			arr = springs[:start] + strings.Repeat("#", damaged[0]) + "." + arr
 			arr = strings.Replace(arr, "?", ".", -1)
-			if r.MatchString(arr) {
-				results <- arr
-			}
+			results <- arr
 		}
 	}
 }
