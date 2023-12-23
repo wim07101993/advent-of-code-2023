@@ -1,7 +1,6 @@
 package main
 
 import (
-	"slices"
 	"strings"
 	"testing"
 )
@@ -142,24 +141,19 @@ func TestGetArrangements(t *testing.T) {
 		},
 	}
 
-	cs := make([]chan string, len(cases))
+	cs := make([]chan int64, len(cases))
 	for i, c := range cases {
-		cs[i] = make(chan string)
+		cs[i] = make(chan int64)
 		go func(i int) {
-			GetArrangements(c.springs, c.damaged, cs[i])
+			GetArrangementCounts(c.springs, c.damaged, cs[i])
 		}(i)
-		var output []string
+		var total int64
 		for s := range cs[i] {
-			output = append(output, s)
+			total += s
 		}
 
-		if len(output) != len(c.expected) {
-			t.Errorf("expected %v arrangement but got %v\n%v\n%v\n%v\n%v", len(c.expected), len(output), c.expected, output, c.springs, c.damaged)
-		}
-		for _, e := range c.expected {
-			if !slices.Contains(output, e) {
-				t.Errorf("expected to find %v in arrangements\n%v\n%v\n%v", e, output, c.springs, c.damaged)
-			}
+		if int(total) != len(c.expected) {
+			t.Errorf("expected %v arrangement but got %v\n%v\n%v", len(c.expected), total, c.springs, c.damaged)
 		}
 	}
 }

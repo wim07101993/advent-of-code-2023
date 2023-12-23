@@ -6,7 +6,6 @@ import (
 	"github.com/schollz/progressbar/v3"
 	"io"
 	"os"
-	"regexp"
 	"runtime"
 	"strconv"
 	"strings"
@@ -21,16 +20,16 @@ func Solve(r io.Reader) int64 {
 	scanner := bufio.NewScanner(r)
 	scanner.Split(bufio.ScanLines)
 
-	var cs []chan string
+	var cs []chan int64
 	for scanner.Scan() {
-		c := make(chan string)
+		c := make(chan int64)
 		cs = append(cs, c)
 		fmt.Println("start searching for", scanner.Text())
-		go func(l string, c chan<- string) {
+		go func(l string, c chan<- int64) {
 			ss := strings.Split(l, " ")
 			damaged := UnfoldDamaged(ParseDamaged(strings.Split(ss[1], ",")))
 			unfolded := UnfoldSprings(ss[0])
-			GetArrangements(unfolded, damaged, c)
+			GetArrangementCounts(unfolded, damaged, c)
 		}(scanner.Text(), c)
 	}
 
@@ -40,10 +39,10 @@ func Solve(r io.Reader) int64 {
 	wg.Add(len(cs))
 	var total int64
 	for _, c := range cs {
-		go func(c <-chan string) {
-			sum := 0
-			for range c {
-				sum++
+		go func(c <-chan int64) {
+			var sum int64
+			for count := range c {
+				sum += count
 			}
 			total += int64(sum)
 			pb.Describe(fmt.Sprintf("%v goroutines\t%v total", runtime.NumGoroutine(), total))
@@ -59,21 +58,19 @@ func Solve(r io.Reader) int64 {
 	return total
 }
 
-func GetArrangements(springs string, damaged []int, results chan<- string) {
-	switch len(damaged) {
-	case 0:
-		// if no damaged springs are left, solution is to replace all '?' with '.'
-		results <- strings.Replace(springs, "?", ".", -1)
-		close(results)
-		return
-	case 1:
-		GetLastArrangements(springs, damaged[0], results)
-		return
-	}
-
+func GetArrangementCounts(springs string, damaged []int, results chan<- int64) {
 	defer func() {
 		close(results)
 	}()
+	switch len(damaged) {
+	case 0:
+		// if no damaged springs are left, solution is to replace all '?' with '.'
+		results <- 1
+		return
+	case 1:
+		results <- int64(GetLastArrangementsCount(springs, damaged[0]))
+		return
+	}
 
 	for i := 0; i < len(springs)-damaged[0]-1; i++ {
 		start := i
@@ -91,35 +88,20 @@ func GetArrangements(springs string, damaged []int, results chan<- string) {
 			continue
 		}
 
-		c := make(chan string)
+		c := make(chan int64)
 
 		go func() {
-			GetArrangements(springs[end+1:], damaged[1:], c)
+			GetArrangementCounts(springs[end+1:], damaged[1:], c)
 		}()
 
-		for arr := range c {
-			arr = springs[:start] + strings.Repeat("#", damaged[0]) + "." + arr
-			arr = strings.Replace(arr, "?", ".", -1)
-			results <- arr
+		for count := range c {
+			results <- count
 		}
 	}
 }
 
-func GetArrangementRegex(damaged []int) *regexp.Regexp {
-	b := strings.Builder{}
-	b.WriteString("\\.*")
-	for i := 0; i < len(damaged)-1; i++ {
-		b.WriteString(fmt.Sprintf("#{%v}\\.+", damaged[i]))
-	}
-	b.WriteString(fmt.Sprintf("#{%v}", damaged[len(damaged)-1]))
-	return regexp.MustCompile(b.String())
-}
-
-func GetLastArrangements(springs string, damaged int, results chan<- string) {
-	defer func() {
-		close(results)
-	}()
-
+func GetLastArrangementsCount(springs string, damaged int) int {
+	count := 0
 	for start := 0; start < len(springs)-damaged+1; start++ {
 		end := start + damaged
 		sub := springs[start:end]
@@ -140,12 +122,9 @@ func GetLastArrangements(springs string, damaged int, results chan<- string) {
 			continue
 		}
 
-		// replace the substring with # and add it to the arrs
-		arr := springs[:start] + strings.Repeat("#", damaged) + trailing
-		arr = strings.Replace(arr, "?", ".", -1)
-
-		results <- arr
+		count++
 	}
+	return count
 }
 
 func ParseDamaged(ss []string) []int {
